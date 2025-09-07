@@ -37,6 +37,54 @@ const Connection = ({ x1, y1, x2, y2, opacity }) => (
   </svg>
 )
 
+// Animated counter component
+const AnimatedCounter = ({ targetValue, duration = 2000, delay = 0 }) => {
+  const [currentValue, setCurrentValue] = useState(0)
+  const [hasStarted, setHasStarted] = useState(false)
+
+  useEffect(() => {
+    const startTimer = setTimeout(() => {
+      setHasStarted(true)
+    }, delay)
+
+    return () => clearTimeout(startTimer)
+  }, [delay])
+
+  useEffect(() => {
+    if (!hasStarted) return
+
+    // Extract numeric value from string like "48+" or "5★"
+    const numericValue = parseInt(targetValue.toString().replace(/[^\d]/g, ''))
+    
+    if (isNaN(numericValue)) {
+      setCurrentValue(targetValue)
+      return
+    }
+
+    const startTime = Date.now()
+    const animate = () => {
+      const elapsed = Date.now() - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      
+      // Easing function for smooth animation
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4)
+      const current = Math.floor(easeOutQuart * numericValue)
+      
+      setCurrentValue(current)
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate)
+      } else {
+        setCurrentValue(targetValue) // Set final value with suffix
+      }
+    }
+    
+    requestAnimationFrame(animate)
+  }, [hasStarted, targetValue, duration])
+
+  return <span>{currentValue}</span>
+}
+
 export default function Banner() {
   const [particles, setParticles] = useState([])
   const [connections, setConnections] = useState([])
@@ -94,10 +142,10 @@ export default function Banner() {
   }, [])
 
   const stats = [
-    { value: "48+", label: "Проектов выполнено", color: "text-red-500" },
-    { value: "24/7", label: "Поддержка", color: "text-yellow-500" },
-    { value: "5★", label: "Рейтинг клиентов", color: "text-red-500" },
-    { value: "14 дней", label: "Средний срок", color: "text-yellow-500" }
+    { value: "48+", label: "Проектов выполнено", color: "text-black", delay: 0 },
+    { value: "24/7", label: "Поддержка", color: "text-black", delay: 500 },
+    { value: "5★", label: "Рейтинг клиентов", color: "text-black", delay: 1000 },
+    { value: "14", label: "Средний срок (дней)", color: "text-black", delay: 1500 }
   ]
 
   return (
@@ -123,9 +171,9 @@ export default function Banner() {
         {/* Main Heading */}
         <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-8 leading-tight">
           <span className="text-gray-900">Создаём </span>
-          <span className="text-red-500">сайты</span>
+          <span className="text-black">сайты</span>
           <span className="text-gray-900">, </span>
-          <span className="text-yellow-500">приложения</span>
+          <span className="text-black">приложения</span>
           <br className="hidden sm:block" />
           <span className="text-gray-900">и ботов под ключ</span>
         </h1>
@@ -145,7 +193,7 @@ export default function Banner() {
             offset={-80} 
             className="cursor-pointer"
           >
-            <button className="group bg-red-500 hover:bg-red-600 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg flex items-center gap-3">
+            <button className="group bg-white text-black border border-gray-300 font-semibold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg flex items-center gap-3">
               Заказать проект
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
@@ -158,7 +206,7 @@ export default function Banner() {
             offset={-80} 
             className="cursor-pointer"
           >
-            <button className="group flex items-center gap-3 text-gray-700 border border-amber-100 hover:text-gray-900 font-semibold px-8 py-4 rounded-xl hover:bg-gray-50 transition-all duration-300">
+            <button className="group flex items-center gap-3 text-gray-700 border border-gray-300 hover:text-gray-900 font-semibold px-8 py-4 rounded-xl hover:bg-gray-50 transition-all duration-300">
               <div className="w-10 rounded-full flex items-center justify-center">
                 <Play className="w-5 h-5 text-gray-700 ml-1" />
               </div>
@@ -167,7 +215,7 @@ export default function Banner() {
           </ScrollLink>
         </div>
 
-        {/* Stats */}
+        {/* Animated Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
           {stats.map((stat, index) => (
             <div 
@@ -175,7 +223,11 @@ export default function Banner() {
               className="text-center transform hover:scale-105 transition-all duration-300"
             >
               <div className={`text-3xl sm:text-4xl lg:text-5xl font-bold mb-2 ${stat.color}`}>
-                {stat.value}
+                <AnimatedCounter 
+                  targetValue={stat.value} 
+                  duration={2000}
+                  delay={stat.delay}
+                />
               </div>
               <div className="text-sm sm:text-base text-gray-600 font-medium">
                 {stat.label}

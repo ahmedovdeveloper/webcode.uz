@@ -37,7 +37,7 @@ export default function Services() {
         "Быстрая загрузка"
       ],
       duration: "7-14 дней",
-      price: "от 50 000 ₽",
+      price: "от 500$",
       popular: false
     },
     {
@@ -51,7 +51,7 @@ export default function Services() {
         "Интеграция с API"
       ],
       duration: "21-45 дней",
-      price: "от 150 000 ₽",
+      price: "от 1000$",
       popular: true
     },
     {
@@ -65,7 +65,7 @@ export default function Services() {
         "Автоответчик"
       ],
       duration: "5-10 дней",
-      price: "от 25 000 ₽",
+      price: "от 500$",
       popular: false
     },
     {
@@ -79,7 +79,7 @@ export default function Services() {
         "Дизайн-система"
       ],
       duration: "7-14 дней",
-      price: "от 30 000 ₽",
+      price: "от 1000$",
       popular: false
     },
     {
@@ -93,7 +93,7 @@ export default function Services() {
         "Аналитика"
       ],
       duration: "Постоянно",
-      price: "от 20 000 ₽/мес",
+      price: "от 900$",
       popular: false
     },
     {
@@ -107,7 +107,7 @@ export default function Services() {
         "Резервное копирование"
       ],
       duration: "Постоянно",
-      price: "от 5 000 ₽/мес",
+      price: "от 300$",
       popular: false
     }
   ]
@@ -171,7 +171,7 @@ export default function Services() {
         to="contact"
         className="cursor-pointer block"
       >
-        <button className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg flex items-center justify-center gap-3 group">
+        <button className="w-full bg-white border border-gray-400 hover:bg-gray-300 text-black font-semibold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg flex items-center justify-center gap-3 group">
           Заказать проект
         </button>
       </ScrollLink>
